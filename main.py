@@ -149,5 +149,5 @@ if __name__ == "__main__":
         print(f'Flush probability ({title}): {flush_count/n}')
 
     hands_to_create = 1_000_000
-    run_n_simulations_for_flush(hands_to_create, "random hand", random_hand)
-    run_n_simulations_for_flush(hands_to_create, "first card ace", first_card_ace)
+    run_n_simulations_for_flush(hands_to_create, "random hand", random_hand) # Flush probability (random hand): 0.002068
+    run_n_simulations_for_flush(hands_to_create, "first card ace", first_card_ace) # Flush probability (first card ace): 0.00193
