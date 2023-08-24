@@ -58,16 +58,23 @@ if __name__ == "__main__":
         hand.add_card(deck.draw_random_card_with_value(1))
         [hand.add_card(card) for card in deck.draw_n_random_cards(4)]
 
-    def run_n_simulations_for_hand(n, title, hand_generation, hand_defintion_type):
+    def run_n_simulations_for_hand(n, title, hand_generation, hand_defintion_type, should_hand_be_counted):
+        valid_hand_count = 0
         flush_count = 0
-        for _ in range(n):
+        while valid_hand_count < n:
             deck = Deck()
             hand = Hand()
             hand_generation(hand, deck)
+            if should_hand_be_counted(hand):
+                valid_hand_count += 1
+            else:
+                continue
             if hand_defintion_type.does_hand_match_definition(hand):
                 flush_count += 1
-        print(f'Flush probability ({title}): {flush_count/n}')
+
+        print(f'{type(hand_defintion_type).__name__} probability ({title}): {flush_count/valid_hand_count}')
 
     hands_to_create = 1_000
-    run_n_simulations_for_hand(hands_to_create, "random hand", random_hand, Flush) # Flush probability (random hand): 0.002068
-    run_n_simulations_for_hand(hands_to_create, "first card ace", first_card_ace, Flush) # Flush probability (first card ace): 0.00193
+    run_n_simulations_for_hand(hands_to_create, "random hand", random_hand, Flush, lambda _: True) # Flush probability (random hand): 0.002068
+    run_n_simulations_for_hand(hands_to_create, "first card ace", first_card_ace, Flush, lambda _: True) # Flush probability (first card ace): 0.002068
+    run_n_simulations_for_hand(hands_to_create, "hand contains ace", random_hand, Flush, lambda hand: hand.does_hand_contain_value(1)) # Flush probability (hand contains ace): 0.00193
